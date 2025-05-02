@@ -6,11 +6,9 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Kiểm tra tồn tại
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ msg: 'Email đã được sử dụng' });
 
-    // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
@@ -30,15 +28,12 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Tìm user
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ msg: 'Sai email hoặc mật khẩu' });
 
-    // So sánh password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: 'Sai email hoặc mật khẩu' });
 
-    // Tạo token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '7d',
     });
