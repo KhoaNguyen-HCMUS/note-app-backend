@@ -2,12 +2,15 @@ const Note = require('../models/note');
 
 // [GET] /api/notes - Lấy tất cả ghi chú của user
 exports.getNotes = async (req, res) => {
-  try {
-    const notes = await Note.find({ user: req.user.id }).sort({ createdAt: -1 });
-    res.json(notes);
-  } catch (err) {
-    res.status(500).json({ msg: 'Lỗi server' });
+  const tag = req.query.tag;
+  const query = { user: req.user.id };
+
+  if (tag) {
+    query.tags = tag;
   }
+
+  const notes = await Note.find(query).sort({ createdAt: -1 });
+  res.json(notes);
 };
 
 // [POST] /api/notes - Tạo ghi chú mới
@@ -18,6 +21,7 @@ exports.createNote = async (req, res) => {
       title,
       content,
       user: req.user.id,
+      tags: tags || [],
     });
     await newNote.save();
     res.status(201).json(newNote);
