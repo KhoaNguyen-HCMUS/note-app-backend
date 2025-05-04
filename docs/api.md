@@ -63,7 +63,10 @@ Authorization: Bearer <jwt_token>
 ### Get All Notes
 
 - **Endpoint**: `GET /notes`
-- **Description**: Lấy tất cả ghi chú của người dùng
+- **Description**: Lấy tất cả ghi chú của người dùng, có thể lọc theo tag.
+
+**Query Params (optional):**
+- `tag`: lọc theo tag cụ thể
 
 #### Response:
 `200 OK`
@@ -75,12 +78,30 @@ Authorization: Bearer <jwt_token>
       "_id": "66336d6b...",
       "title": "Tiêu đề",
       "content": "Nội dung ghi chú",
+      "tags": ["react", "frontend"],
       "createdAt": "2025-05-02T...",
       "updatedAt": "2025-05-02T..."
     }
   ]
 }
 ```
+
+### GET `/api/notes/:id`
+
+Lấy thông tin một ghi chú theo ID.
+
+**Response:**
+```json
+{
+  "_id": "note_id",
+  "title": "Tiêu đề",
+  "content": "Nội dung",
+  "tags": ["backend", "nodejs"],
+  "user": "user_id",
+  "createdAt": "2025-05-02T10:00:00.000Z"
+}
+```
+
 
 ### Create a New Note
 
@@ -91,7 +112,9 @@ Authorization: Bearer <jwt_token>
 ```json
 {
   "title": "Tiêu đề",
-  "content": "Nội dung ghi chú"
+  "content": "Nội dung ghi chú",
+  "tags": ["mongodb", "learning"]
+
 }
 ```
 
@@ -104,6 +127,7 @@ Authorization: Bearer <jwt_token>
     "_id": "66336d6b...",
     "title": "Tiêu đề",
     "content": "Nội dung ghi chú",
+    "tags": ["mongodb", "learning"],
     "createdAt": "...",
     "updatedAt": "..."
   }
@@ -119,7 +143,9 @@ Authorization: Bearer <jwt_token>
 ```json
 {
   "title": "Tiêu đề mới",
-  "content": "Nội dung mới"
+  "content": "Nội dung mới",
+  "tags": ["updated", "tag"]
+
 }
 ```
 
@@ -132,6 +158,7 @@ Authorization: Bearer <jwt_token>
     "_id": "66336d6b...",
     "title": "Tiêu đề mới",
     "content": "Nội dung mới",
+    "tags": ["updated", "tag"],
     "updatedAt": "2025-05-02T..."
   }
 }
