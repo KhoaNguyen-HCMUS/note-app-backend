@@ -38,6 +38,7 @@ exports.updateNote = async (req, res) => {
 
     note.title = req.body.title || note.title;
     note.content = req.body.content || note.content;
+    note.tags = req.body.tags || note.tags;
     await note.save();
 
     res.json(note);
