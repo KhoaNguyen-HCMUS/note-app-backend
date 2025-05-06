@@ -16,16 +16,19 @@ exports.getNotes = async (req, res) => {
 // [POST] /api/notes - Tạo ghi chú mới
 exports.createNote = async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, tags } = req.body;
+
     const newNote = new Note({
       title,
       content,
       user: req.user.id,
       tags: tags || [],
     });
-    await newNote.save();
-    res.status(201).json(newNote);
+
+    const savedNote = await newNote.save();
+    res.status(201).json(savedNote);
   } catch (err) {
+    console.error('Error creating note:', err);
     res.status(500).json({ msg: 'Lỗi server' });
   }
 };
