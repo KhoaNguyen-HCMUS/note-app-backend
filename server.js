@@ -20,9 +20,19 @@ app.get('/', (req, res) => {
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('✅ MongoDB connected');
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  .then(async () => {
+    try {
+      await mongoose.connection.db.admin().ping();
+      console.log('✅ MongoDB connected and pinged successfully');
+
+      const PORT = process.env.PORT || 5000;
+      app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    } catch (error) {
+      console.error('❌ Ping failed:', error);
+      process.exit(1);
+    }
   })
-  .catch((err) => console.error('❌ MongoDB connection failed:', err));
+  .catch((err) => {
+    console.error('❌ MongoDB connection failed:', err);
+    process.exit(1);
+  });
