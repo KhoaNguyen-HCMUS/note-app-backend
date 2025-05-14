@@ -1,0 +1,15 @@
+name: Ping Note App Backend
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Mỗi 15 phút
+  workflow_dispatch:       # Cho phép chạy thủ công
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send request to Note App Backend
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" https://note-app-backend-d56f.onrender.com/
