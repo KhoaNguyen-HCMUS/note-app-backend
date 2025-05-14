@@ -2,6 +2,7 @@
 
 A RESTful API backend for the Note App built with Node.js, Express, and MongoDB.
 
+Front end repo: [Repo](https://github.com/KhoaNguyen-HCMUS/note-app-frontend.git)
 ## Features
 
 - 🔐 JWT Authentication
