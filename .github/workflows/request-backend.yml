@@ -2,7 +2,7 @@ name: Ping Note App Backend
 
 on:
   schedule:
-    - cron: '*/15 * * * *' # Mỗi 15 phút
+    - cron: '*/10 * * * *' # Mỗi 10 phút
   workflow_dispatch:       # Cho phép chạy thủ công
 
 jobs:
