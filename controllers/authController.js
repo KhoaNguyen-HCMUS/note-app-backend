@@ -7,7 +7,7 @@ exports.register = async (req, res) => {
     const { username, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ msg: 'Email đã được sử dụng' });
+    if (existingUser) return res.status(400).json({ msg: 'Email already exists' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -19,10 +19,10 @@ exports.register = async (req, res) => {
 
     await newUser.save();
     console.log('User created:', newUser);
-    res.status(201).json({ msg: 'Đăng ký thành công' });
+    res.status(201).json({ msg: 'Successful registration' });
   } catch (err) {
     console.error('Error during registration:', err, 'with user:', req.body);
-    res.status(500).json({ msg: 'Lỗi server', error: err.message });
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
 
@@ -31,10 +31,10 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: 'Sai email hoặc mật khẩu' });
+    if (!user) return res.status(400).json({ msg: 'Invalid email or password' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: 'Sai email hoặc mật khẩu' });
+    if (!isMatch) return res.status(400).json({ msg: 'Invalid email or password' });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '7d',
@@ -52,6 +52,6 @@ exports.login = async (req, res) => {
     });
   } catch (err) {
     console.error('Error during login:', err, 'with user:', req.body);
-    res.status(500).json({ msg: 'Lỗi server', error: err.message });
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
