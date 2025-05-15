@@ -26,6 +26,7 @@ exports.createNote = async (req, res) => {
     });
 
     const savedNote = await newNote.save();
+    console.log('User has created Note:', req.user.username);
     res.status(201).json(savedNote);
   } catch (err) {
     console.error('Error creating note:', err);
@@ -44,6 +45,7 @@ exports.updateNote = async (req, res) => {
     note.tags = req.body.tags || note.tags;
     await note.save();
 
+    console.log('User has updated Note:', req.user.username);
     res.json(note);
   } catch (err) {
     res.status(500).json({ msg: 'Lỗi server' });
@@ -56,6 +58,7 @@ exports.deleteNote = async (req, res) => {
     const note = await Note.findOneAndDelete({ _id: req.params.id, user: req.user.id });
     if (!note) return res.status(404).json({ msg: 'Không tìm thấy ghi chú' });
 
+    console.log('User has deleted Note:', req.user.username);
     res.json({ msg: 'Đã xóa ghi chú' });
   } catch (err) {
     res.status(500).json({ msg: 'Lỗi server' });

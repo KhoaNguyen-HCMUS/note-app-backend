@@ -18,8 +18,10 @@ exports.register = async (req, res) => {
     });
 
     await newUser.save();
+    console.log('User created:', newUser);
     res.status(201).json({ msg: 'Đăng ký thành công' });
   } catch (err) {
+    console.error('Error during registration:', err, 'with user:', req.body);
     res.status(500).json({ msg: 'Lỗi server', error: err.message });
   }
 };
@@ -38,6 +40,8 @@ exports.login = async (req, res) => {
       expiresIn: '7d',
     });
 
+    console.log('User logged in:', user.username);
+
     res.json({
       token,
       user: {
@@ -47,6 +51,7 @@ exports.login = async (req, res) => {
       },
     });
   } catch (err) {
+    console.error('Error during login:', err, 'with user:', req.body);
     res.status(500).json({ msg: 'Lỗi server', error: err.message });
   }
 };
