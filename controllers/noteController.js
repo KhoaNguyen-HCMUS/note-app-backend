@@ -2,15 +2,26 @@ const Note = require('../models/note');
 
 // [GET] /api/notes - Lấy tất cả ghi chú của user
 exports.getNotes = async (req, res) => {
-  const tag = req.query.tag;
-  const query = { user: req.user.id };
+  try {
+    const { tag, keyword } = req.query;
+    const query = { user: req.user.id };
 
-  if (tag) {
-    query.tags = tag;
+    // Add tag filter if provided
+    if (tag) {
+      query.tags = tag;
+    }
+
+    // Add keyword search if provided
+    if (keyword) {
+      query.$or = [{ title: { $regex: keyword, $options: 'i' } }, { content: { $regex: keyword, $options: 'i' } }];
+    }
+
+    const notes = await Note.find(query).sort({ createdAt: -1 });
+    res.json(notes);
+  } catch (err) {
+    console.error('Error fetching notes:', err);
+    res.status(500).json({ msg: 'Server error' });
   }
-
-  const notes = await Note.find(query).sort({ createdAt: -1 });
-  res.json(notes);
 };
 
 // [POST] /api/notes - Tạo ghi chú mới
@@ -26,7 +37,7 @@ exports.createNote = async (req, res) => {
     });
 
     const savedNote = await newNote.save();
-    console.log('User has created Note:', req.user.username);
+    console.log('User has created Note');
     res.status(201).json(savedNote);
   } catch (err) {
     console.error('Error creating note:', err);
@@ -45,7 +56,7 @@ exports.updateNote = async (req, res) => {
     note.tags = req.body.tags || note.tags;
     await note.save();
 
-    console.log('User has updated Note:', req.user.username);
+    console.log('User has updated Note');
     res.json(note);
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
