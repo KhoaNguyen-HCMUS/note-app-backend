@@ -6,11 +6,6 @@ const authRoutes = require('./routes/authRoutes');
 const noteRoutes = require('./routes/noteRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 
-const jobRoutes = require('./routes/jobRoutes');
-const companyRoutes = require('./routes/companyRoutes');
-const skillRoutes = require('./routes/skillRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-
 dotenv.config();
 
 const app = express();
@@ -20,11 +15,6 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/tasks', taskRoutes);
-
-app.use('/api/jobs', jobRoutes);
-app.use('/api/companies', companyRoutes);
-app.use('/api/skills', skillRoutes);
-app.use('/api/categories', categoryRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
